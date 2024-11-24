@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "necronomicon": "^1.2.0",
-    "phantomaton-plugins": "^0.0.2"
+    "phantomaton-plugins": "^0.0.2",
+    "phantomaton-system": "^1.0.0"
   }
 }

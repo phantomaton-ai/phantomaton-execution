@@ -5,17 +5,22 @@ import plugins from 'phantomaton-plugins';
 import Executioner from './executioner.js';
 
 export default plugins.create(
-  { commands: plugins.composite, executionor: plugins.singleton },
+  { commands: plugins.composite, executioner: plugins.singleton },
   ({ configuration, extensions, instance }) => [
-    plugins.define(extensions.executionor)
+    extensions.commands.aggregator(
+      [],
+      () => (commands) => commands.map(command => command())
+    ),
+    plugins.define(extensions.executioner)
       .with(extensions.commands)
       .as(commands => new Executioner(configuration, commands)),
-    plugins.define(system.system).with(extensions.executionor).as(
-      executionor => () => executionor.prompt()
+    system.system.provider(
+      [extensions.executioner.resolve],
+      ([executioner]) => () => executioner.prompt()
     ),
     conversations.assistant.decorator(
       [extensions.executioner.resolve],
-      executioner => assistant => executioner.assistant(assistant)
+      ([executioner]) => assistant => executioner.assistant(assistant)
     )
   ]
 );
