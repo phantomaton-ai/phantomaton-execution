@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'lovecraft';
 import defaults from './defaults.js';
 
 describe('Execution Defaults', () => {

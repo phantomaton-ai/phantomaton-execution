@@ -4,7 +4,7 @@ import Assistant from './assistant.js';
 import defaults from './defaults.js';
 
 export default class Executioner {
-  constructor({ header, message, symbols }, commands) {
+  constructor(options, commands) {
     const { header, message, symbols } = { ...defaults, ...options };
     this.header = header;
     this.message = message;

@@ -1,4 +1,4 @@
-import { expect, stub } from 'chai';
+import { expect, stub } from 'lovecraft';
 import necronomicon from 'necronomicon';
 import Executioner from './executioner.js';
 import defaults from './defaults.js';

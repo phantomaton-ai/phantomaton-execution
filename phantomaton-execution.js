@@ -9,7 +9,7 @@ export default plugins.create(
   ({ configuration, extensions, instance }) => [
     plugins.define(extensions.executionor)
       .with(extensions.commands)
-      .as(commands => new Executioner(configuration, commands))
+      .as(commands => new Executioner(configuration, commands)),
     plugins.define(system.system).with(extensions.executionor).as(
       executionor => () => executionor.prompt()
     ),

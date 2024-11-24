@@ -1,6 +1,7 @@
-import { expect, stub } from 'chai';
+import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import phantomaton from './phantomaton-execution.js';
+
+import plugin from './phantomaton-execution.js';
 
 describe('Phantomaton Execution Plugin', () => {
   it('provides the system prompt from the executioner', () => {
