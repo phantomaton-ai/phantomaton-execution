@@ -1,4 +1,4 @@
-# Phantomaton Execution 🔍
+# Phantomaton Execution ⚙️
 
 The Phantomaton Execution module is a plugin for the [Phantomaton](https://github.com/phantomaton-ai/phantomaton) AI framework. It provides a robust and extensible infrastructure for registering and executing commands within the Phantomaton conversational ecosystem.
 
