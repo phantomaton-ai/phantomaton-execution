@@ -1,5 +1,7 @@
 import necronomicon from 'necronomicon';
 
+import Assistant from './assistant.js';
+
 const defaults = {
   header: 'Command execution',
   message: 'Executable commands are available in this environment.'
@@ -19,5 +21,9 @@ export default class Executioner {
       line => line.startsWith('#') ? `#${line}` : line
     ).join('\n');
     return [`# ${this.header}`, this.message, shifted].join('\n\n');
+  }
+
+  assistant(assistant) {
+    return new Assistant(this.spellbook, assistant);
   }
 }
