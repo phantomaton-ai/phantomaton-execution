@@ -10,10 +10,12 @@ describe('Execution Assistant', () => {
     const assistant = {
       converse: (turns, message) => `Response: ${message}`
     };
-    const executionAssistant = new Assistant(spellbook, assistant);
+    const decorated = new Assistant(spellbook, assistant);
 
-    const response = await executionAssistant.converse(['turn1'], 'Hello');
-    expect(response).to.equal('Response: Preamble: Hello');
+    expect(await decorated.converse(['turn1'], 'Hello'))
+      .to.equal('Response: Hello');
+    expect(await decorated.converse(['turn1'], 'Hello'))
+      .to.equal('Response: Preamble: Response: Hello\n\n---\n\nHello');
   });
 
   it('updates the preamble from the executed response', async () => {
