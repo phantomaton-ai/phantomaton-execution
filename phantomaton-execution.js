@@ -5,7 +5,7 @@ import plugins from 'phantomaton-plugins';
 import Executioner from './executioner.js';
 
 export default plugins.create(
-  { commands: plugins.aggregate, executionor: plugins.singleton },
+  { commands: plugins.composite, executionor: plugins.singleton },
   ({ configuration, extensions, instance }) => [
     plugins.define(extensions.executionor)
       .with(extensions.commands)
