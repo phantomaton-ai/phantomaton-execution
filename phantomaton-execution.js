@@ -13,7 +13,7 @@ export default plugins.create(
     ),
     plugins.define(extensions.executioner)
       .with(extensions.commands)
-      .as(commands => new Executioner(configuration, commands)),
+      .as(commands => new Executioner(configuration, commands || [])),
     system.system.provider(
       [extensions.executioner.resolve],
       ([executioner]) => () => executioner.prompt()
