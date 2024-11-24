@@ -23,24 +23,21 @@ To use the Phantomaton Execution plugin, you'll need to install it as a dependen
 npm install phantomaton-execution
 ```
 
-Once installed, you can import and configure the plugin:
+Once installed, you can build additional plugins which provide new [Necronomicon](https://github.com/phantomaton-ai/necronomicon) commands:
 
 ```javascript
 import execution from 'phantomaton-execution';
+import plugins from 'phantomaton-plugins';
 
-const container = execution.create({
-  // Provide any necessary configuration options
-});
-
-// Resolve the execution-related extension points
-const [getPrompt] = container.resolve(system.prompt.resolve);
-const [getAssistant] = container.resolve(conversations.assistant.resolve);
-
-// The system prompt will now include documentation for registered commands
-const prompt = getPrompt();
-
-// The Assistant will automatically execute registered commands
-const response = await getAssistant().converse(['user input'], 'Hello');
+export default plugins.create([
+  plugins.define(execution.commands).as({
+    name: 'capitalize',
+    validate: (attributes, body) => !!attributes.text,
+    execute: (attributes) => attributes.text.toUpperCase(),
+    example: { attributes: { text: 'Test' } },
+    desription: 'Capitalizes text'
+  })
+])
 ```
 
 For more information on extending the Phantomaton Execution plugin, please refer to the [Phantomaton Plugins documentation](https://github.com/phantomaton-ai/phantomaton-plugins#readme).
