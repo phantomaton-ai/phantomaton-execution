@@ -1,23 +1,29 @@
 # Phantomaton Execution 🔍
 
-The Phantomaton Execution module is responsible for managing the execution lifecycle of Phantomaton AI agents. It provides a robust and scalable infrastructure for running Phantomaton instances, handling tasks, and coordinating with other Phantomaton components.
+The Phantomaton Execution module is a plugin for the [Phantomaton](https://github.com/phantomaton-ai/phantomaton) AI framework. It provides a robust and extensible infrastructure for registering and executing commands within the Phantomaton conversational ecosystem.
+
+## Purpose 🎯
+
+Phantomaton is designed to be a highly interactive and responsive AI assistant, capable of performing a variety of tasks beyond just conversing. The Phantomaton Execution plugin enables this by allowing developers to register executable commands that can be invoked by the LLM-powered Assistant.
+
+When a registered command is detected in the user's input, the Phantomaton Execution plugin will execute the corresponding command and prepend the result to the Assistant's response. This allows the Phantomaton system to seamlessly integrate task-oriented functionality directly into the conversational flow.
 
 ## Features 🔧
 
-- **Task Management**: Handles the scheduling and execution of Phantomaton tasks, ensuring efficient resource utilization and reliable task completion.
-- **Sandboxing**: Runs Phantomaton instances in isolated sandboxes, preventing harmful or unintended behavior from affecting the broader system.
-- **Monitoring**: Tracks the status and performance of running Phantomaton instances, providing insights for debugging and optimization.
-- **Extensibility**: Allows for the integration of custom execution strategies and specialized task handlers through a plugin-based architecture.
+- **Command Registration**: Developers can register commands using the [Phantomaton Plugins](https://github.com/phantomaton-ai/phantomaton-plugins) framework, providing a simple and extensible way to add new capabilities.
+- **Command Documentation**: Registered commands are automatically documented and included in the system prompt, making it easy for users to discover and utilize the available functionality.
+- **Preamble Injection**: The results of executed commands are prepended to the Assistant's responses, maintaining the conversational context and flow.
+- **Sandboxing**: Command execution is performed in a secure sandbox, preventing harmful or unintended behavior from affecting the broader Phantomaton system.
 
 ## Usage 🛠️
 
-To use the Phantomaton Execution module, you'll need to install it as a dependency in your Phantomaton-based application:
+To use the Phantomaton Execution plugin, you'll need to install it as a dependency in your Phantomaton-based application:
 
 ```bash
 npm install phantomaton-execution
 ```
 
-Once installed, you can import and configure the module:
+Once installed, you can import and configure the plugin:
 
 ```javascript
 import execution from 'phantomaton-execution';
@@ -27,17 +33,17 @@ const container = execution.create({
 });
 
 // Resolve the execution-related extension points
-const [runTask] = container.resolve(execution.task.resolve);
+const [getPrompt] = container.resolve(system.prompt.resolve);
+const [getAssistant] = container.resolve(conversations.assistant.resolve);
 
-// Execute a Phantomaton task
-await runTask(myTaskDefinition);
+// The system prompt will now include documentation for registered commands
+const prompt = getPrompt();
+
+// The Assistant will automatically execute registered commands
+const response = await getAssistant().converse(['user input'], 'Hello');
 ```
 
-## Extensibility 🔌
-
-The Phantomaton Execution module is designed to be highly extensible. You can create custom task handlers, execution strategies, and other components by implementing the appropriate extension point interfaces.
-
-For more information on extending the Phantomaton Execution module, please refer to the [Phantomaton Plugins documentation](https://github.com/phantomaton-ai/phantomaton-plugins#readme).
+For more information on extending the Phantomaton Execution plugin, please refer to the [Phantomaton Plugins documentation](https://github.com/phantomaton-ai/phantomaton-plugins#readme).
 
 ## Contributing 🤝
 
