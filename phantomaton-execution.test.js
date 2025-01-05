@@ -51,7 +51,7 @@ describe('Phantomaton Execution Plugin', () => {
           description: 'Capitalizes text'
         })
       );
-      converse.resolves('🪄✨ capitalize(text:hello)')
+      converse.resolves('🪄✨ capitalize(text:hello)');
 
       const [assistant] = container.resolve(conversations.assistant.resolve);
       const result = await assistant.converse([], 'Hi friend...');
