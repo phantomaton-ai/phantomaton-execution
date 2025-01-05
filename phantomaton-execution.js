@@ -5,14 +5,14 @@ import plugins from 'phantomaton-plugins';
 import Executioner from './executioner.js';
 
 export default plugins.create(
-  { commands: plugins.composite, executioner: plugins.singleton },
+  { command: plugins.composite, executioner: plugins.singleton },
   ({ configuration, extensions, instance }) => [
-    extensions.commands.aggregator(
+    extensions.command.aggregator(
       [],
-      () => (commands) => commands.map(command => command())
+      () => (commands) => [commands]
     ),
     plugins.define(extensions.executioner)
-      .with(extensions.commands)
+      .with(extensions.command)
       .as(commands => new Executioner(configuration, commands || [])),
     system.system.provider(
       [extensions.executioner.resolve],

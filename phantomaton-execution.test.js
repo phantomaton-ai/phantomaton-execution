@@ -31,16 +31,18 @@ describe('Phantomaton Execution Plugin', () => {
   });
 
   describe('Command Execution', () => {
-    it('can execute a registered command', async () => {
-      // Create a mock base assistant that captures the conversation
-      const mockAssistant = {
-        async converse(turns, message) {
-          return message;
-        }
-      };
+    let converse;
 
-      // Register a command plugin
-      const commandPlugin = plugins.create([
+    beforeEach(() => {
+      converse = stub();
+      container.install(conversations.assistant.provider(
+        [],
+        () => ({converse})
+      ));
+    });
+    
+    it('can execute a registered command', async () => {
+      container.install(
         plugins.define(execution.command).as({
           name: 'capitalize',
           validate: (attributes) => !!attributes.text,
@@ -48,39 +50,27 @@ describe('Phantomaton Execution Plugin', () => {
           example: { attributes: { text: 'Test' } },
           description: 'Capitalizes text'
         })
-      ]);
-
-      // Resolve the enhanced assistant
-      const [decoratedAssistant] = container
-        .install(commandPlugin)
-        .resolve(conversations.assistant.resolve);
-
-      // Simulate a conversation with a command
-      const result = await decoratedAssistant.converse([], 
-        'Please capitalize the text: ${capitalize(text: hello)}'
       );
+      converse.resolves('🪄✨ capitalize(text:hello)')
 
-      // Verify the command was executed
-      expect(decoratedAssistant.preamble).to.equal('HELLO');
+      const [assistant] = container.resolve(conversations.assistant.resolve);
+      const result = await assistant.converse([], 'Hi friend...');
+
+      expect(assistant.preamble).to.contain('HELLO');
     });
 
     it('can execute multiple registered commands', async () => {
       // Create a mock base assistant that captures the conversation
-      const mockAssistant = {
-        async converse(turns, message) {
-          return message;
-        }
-      };
-
-      // Register multiple command plugins
-      const multiCommandPlugin = plugins.create([
+      container.install(
         plugins.define(execution.command).as({
           name: 'capitalize',
           validate: (attributes) => !!attributes.text,
           execute: (attributes) => attributes.text.toUpperCase(),
           example: { attributes: { text: 'Test' } },
           description: 'Capitalizes text'
-        }),
+        })
+      );
+      container.install(
         plugins.define(execution.command).as({
           name: 'reverse',
           validate: (attributes) => !!attributes.text,
@@ -88,20 +78,18 @@ describe('Phantomaton Execution Plugin', () => {
           example: { attributes: { text: 'hello' } },
           description: 'Reverses text'
         })
-      ]);
-
-      // Resolve the enhanced assistant
-      const [decoratedAssistant] = container
-        .install(multiCommandPlugin)
-        .resolve(conversations.assistant.resolve);
-
-      // Simulate a conversation with multiple commands
-      const result = await decoratedAssistant.converse([], 
-        'Please process: ${capitalize(text: hello)} and ${reverse(text: world)}'
       );
 
-      // Verify the commands were executed
-      expect(decoratedAssistant.preamble).to.equal('HELLO\nworld');
+      converse.resolves([
+        '🪄✨ capitalize(text:hello)',
+        '🪄✨ reverse(text:hello)'
+      ].join('\n'));
+
+      const [assistant] = container.resolve(conversations.assistant.resolve);
+      const result = await assistant.converse([], 'Hi friend...');
+
+      expect(assistant.preamble).to.contain('HELLO');
+      expect(assistant.preamble).to.contain('olleh');
     });
   });
 });
