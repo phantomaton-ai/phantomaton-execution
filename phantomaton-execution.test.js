@@ -1,48 +1,33 @@
-import test from 'node:test';
-import assert from 'node:assert';
+import { expect, stub } from 'lovecraft';
+import hierophant from 'hierophant';
+import conversations from 'phantomaton-conversations';
 import plugins from 'phantomaton-plugins';
+import system from 'phantomaton-system';
+
+import Assistant from './assistant.js';
 import execution from './phantomaton-execution.js';
 
-test('Phantomaton Execution Command Registration', async (t) => {
-  await t.test('Single command registration', () => {
-    const singleCommandPlugin = plugins.create([
-      plugins.define(execution.command).as({
-        name: 'capitalize',
-        validate: (attributes) => !!attributes.text,
-        execute: (attributes) => attributes.text.toUpperCase(),
-        example: { attributes: { text: 'Test' } },
-        description: 'Capitalizes text'
-      })
-    ]);
+describe('Phantomaton Execution Plugin', () => {
+  let container;
 
-    const commands = singleCommandPlugin.extensions.commands();
-    assert.strictEqual(commands.length, 1);
-    assert.strictEqual(commands[0]().name, 'capitalize');
+  beforeEach(() => {
+    container = hierophant();
+    container.install(plugins.input.resolver());
+    container.install(plugins.input.provider([], () => () => 'test'));
+    [conversations, system, execution].forEach(plugin => {
+      plugin().install.forEach(c => container.install(c));
+    });
   });
 
-  await t.test('Multiple command registration', () => {
-    const multiCommandPlugin = plugins.create([
-      plugins.define(execution.commands).as([
-        {
-          name: 'capitalize',
-          validate: (attributes) => !!attributes.text,
-          execute: (attributes) => attributes.text.toUpperCase(),
-          example: { attributes: { text: 'Test' } },
-          description: 'Capitalizes text'
-        },
-        {
-          name: 'reverse',
-          validate: (attributes) => !!attributes.text,
-          execute: (attributes) => attributes.text.split('').reverse().join(''),
-          example: { attributes: { text: 'hello' } },
-          description: 'Reverses text'
-        }
-      ])
-    ]);
+  it('provides the system prompt from the executioner', () => {
+    const [getPrompt] = container.resolve(system.system.resolve);
+    const prompt = getPrompt();
+    expect(prompt).to.contain('# Command execution');
+  });
 
-    const commands = multiCommandPlugin.extensions.commands();
-    assert.strictEqual(commands.length, 2);
-    assert.strictEqual(commands[0]().name, 'capitalize');
-    assert.strictEqual(commands[1]().name, 'reverse');
+  it('binds the executioner assistant to the conversation', () => {
+    const [assistant] = container.resolve(conversations.assistant.resolve);
+    expect(assistant).instanceOf(Assistant);
   });
 });
+
