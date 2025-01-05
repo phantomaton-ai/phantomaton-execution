@@ -1,6 +1,6 @@
 {
   "name": "phantomaton-execution",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "phantomaton-execution.js",
   "scripts": {
     "all": "lovecraft -a",
