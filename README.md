@@ -23,54 +23,36 @@ To use the Phantomaton Execution plugin, you'll need to install it as a dependen
 npm install phantomaton-execution
 ```
 
-### Registering Single Commands
+### Registering Commands
 
-You can register a single command using `plugin.define(execution.command)`:
+You can register multiple commands by calling `plugin.define(execution.command)` multiple times:
 
 ```javascript
 import execution from 'phantomaton-execution';
 import plugins from 'phantomaton-plugins';
 
 export default plugins.create([
+  // Register first command
   plugins.define(execution.command).as({
     name: 'capitalize',
-    validate: (attributes, body) => !!attributes.text,
+    validate: (attributes) => !!attributes.text,
     execute: (attributes) => attributes.text.toUpperCase(),
     example: { attributes: { text: 'Test' } },
     description: 'Capitalizes text'
+  }),
+
+  // Register another command
+  plugins.define(execution.command).as({
+    name: 'reverse',
+    validate: (attributes) => !!attributes.text,
+    execute: (attributes) => attributes.text.split('').reverse().join(''),
+    example: { attributes: { text: 'hello' } },
+    description: 'Reverses text'
   })
 ])
 ```
 
-### Registering Multiple Commands
-
-You can also register multiple commands by leveraging the `execution.commands` extension point:
-
-```javascript
-import execution from 'phantomaton-execution';
-import plugins from 'phantomaton-plugins';
-
-export default plugins.create([
-  plugins.define(execution.commands).as([
-    {
-      name: 'capitalize',
-      validate: (attributes, body) => !!attributes.text,
-      execute: (attributes) => attributes.text.toUpperCase(),
-      example: { attributes: { text: 'Test' } },
-      description: 'Capitalizes text'
-    },
-    {
-      name: 'reverse',
-      validate: (attributes, body) => !!attributes.text,
-      execute: (attributes) => attributes.text.split('').reverse().join(''),
-      example: { attributes: { text: 'hello' } },
-      description: 'Reverses text'
-    }
-  ])
-])
-```
-
-For more information on extending the Phantomaton Execution plugin, please refer to the [Phantomaton Plugins documentation](https://github.com/phantomaton-ai/phantomaton-plugins#readme).
+This approach allows you to easily add new commands to your Phantomaton execution environment.
 
 ## Contributing 🤝
 
