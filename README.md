@@ -11,7 +11,7 @@ When a registered command is detected in the user's input, the Phantomaton Execu
 ## Features 🔧
 
 - **Command Registration**: Developers can register commands using the [Phantomaton Plugins](https://github.com/phantomaton-ai/phantomaton-plugins) framework, providing a simple and extensible way to add new capabilities.
-- **Command Documentation**: Registered commands are automatically documented and included in the system prompt, making it easy for users to discover and utilize the available functionality.
+- **Command Documentation**: Registered commands are automatically documented using the [Necronomicon](https://github.com/phantomaton-ai/necronomicon) specification, making it easy for users to discover and utilize the available functionality.
 - **Preamble Injection**: The results of executed commands are prepended to the Assistant's responses, maintaining the conversational context and flow.
 - **Sandboxing**: Command execution is performed in a secure sandbox, preventing harmful or unintended behavior from affecting the broader Phantomaton system.
 
@@ -25,7 +25,7 @@ npm install phantomaton-execution
 
 ### Registering Commands
 
-You can register multiple commands by calling `plugin.define(execution.command)` multiple times:
+You can register multiple commands by calling `plugin.define(execution.command)` multiple times. This leverages the [Phantomaton Plugins](https://github.com/phantomaton-ai/phantomaton-plugins) system to create extensible command definitions that follow the [Necronomicon](https://github.com/phantomaton-ai/necronomicon) specification:
 
 ```javascript
 import execution from 'phantomaton-execution';
@@ -51,8 +51,6 @@ export default plugins.create([
   })
 ])
 ```
-
-This approach allows you to easily add new commands to your Phantomaton execution environment.
 
 ## Contributing 🤝
 
