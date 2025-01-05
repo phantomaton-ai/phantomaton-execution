@@ -23,20 +23,50 @@ To use the Phantomaton Execution plugin, you'll need to install it as a dependen
 npm install phantomaton-execution
 ```
 
-Once installed, you can build additional plugins which provide new [Necronomicon](https://github.com/phantomaton-ai/necronomicon) commands:
+### Registering Single Commands
+
+You can register a single command using `plugin.define(execution.command)`:
 
 ```javascript
 import execution from 'phantomaton-execution';
 import plugins from 'phantomaton-plugins';
 
 export default plugins.create([
-  plugins.define(execution.commands).as({
+  plugins.define(execution.command).as({
     name: 'capitalize',
     validate: (attributes, body) => !!attributes.text,
     execute: (attributes) => attributes.text.toUpperCase(),
     example: { attributes: { text: 'Test' } },
-    desription: 'Capitalizes text'
+    description: 'Capitalizes text'
   })
+])
+```
+
+### Registering Multiple Commands
+
+You can also register multiple commands by leveraging the `execution.commands` extension point:
+
+```javascript
+import execution from 'phantomaton-execution';
+import plugins from 'phantomaton-plugins';
+
+export default plugins.create([
+  plugins.define(execution.commands).as([
+    {
+      name: 'capitalize',
+      validate: (attributes, body) => !!attributes.text,
+      execute: (attributes) => attributes.text.toUpperCase(),
+      example: { attributes: { text: 'Test' } },
+      description: 'Capitalizes text'
+    },
+    {
+      name: 'reverse',
+      validate: (attributes, body) => !!attributes.text,
+      execute: (attributes) => attributes.text.split('').reverse().join(''),
+      example: { attributes: { text: 'hello' } },
+      description: 'Reverses text'
+    }
+  ])
 ])
 ```
 
