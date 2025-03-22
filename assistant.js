@@ -10,7 +10,7 @@ export default class Assistant {
       message = [this.preamble, message].join('\n\n---\n\n');
     }
     const reply = await this.assistant.converse(turns, message);
-    this.preamble = this.spellbook.execute(reply);
+    this.preamble = await this.spellbook.execute(reply);
     return reply;
   }
 }

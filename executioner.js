@@ -8,7 +8,10 @@ export default class Executioner {
     const { header, message, symbols } = { ...defaults, ...options };
     this.header = header;
     this.message = message;
-    this.spellbook = necronomicon({ symbols, commands, includes: { text: false } });
+    this.spellbook = necronomicon({ symbols, commands, includes: {
+      promises: true,
+      text: false
+    } });
   }
 
   prompt() {

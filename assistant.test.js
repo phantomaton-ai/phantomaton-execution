@@ -5,10 +5,10 @@ import Assistant from './assistant.js';
 describe('Execution Assistant', () => {
   it('prepends execution results to subsequent messages', async () => {
     const spellbook = {
-      execute: (text) => `Preamble: ${text}`
+      execute: async (text) => `Preamble: ${text}`
     };
     const assistant = {
-      converse: (turns, message) => `Response: ${message}`
+      converse: async (turns, message) => `Response: ${message}`
     };
     const decorated = new Assistant(spellbook, assistant);
 
